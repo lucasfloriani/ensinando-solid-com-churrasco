@@ -3,7 +3,6 @@ import { Box, Image, Heading, Text } from "theme-ui";
 import Giphy from "./src/components/giphy";
 import { List, ListItem } from "./src/components/list";
 import customTheme from "./src/components/theme";
-import barbaraLiskov from "./src/images/barbara-liskov.jpg";
 
 export const theme = {
   ...themes.future,
@@ -40,16 +39,35 @@ export const theme = {
 ---
 
 <Heading as="h1" mb={4}>
+  Quando foi criada?
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  Seus conceitos foram iniciados em 1995 por Robert C. Martin (aka Uncle Bob), porem somente em
+  meados de 2000 que Michael Feathers que a sigla foi usada
+</Text>
+
+---
+
+<Heading as="h1" mb={4}>
   S.O.L.I.D
 </Heading>
 
 <List>
-  <ListItem>S - Single-responsability</ListItem>
-  <ListItem>O - Open-closed</ListItem>
-  <ListItem>L - Liskov Substitution</ListItem>
-  <ListItem>I - Interface Segregation</ListItem>
-  <ListItem>D - Dependency Inversion</ListItem>
+  <ListItem>S - Single-responsability (Robert C. Martin)</ListItem>
+  <ListItem>O - Open-closed (Bertrand Meyer)</ListItem>
+  <ListItem>L - Liskov Substitution (Barabara Liskov)</ListItem>
+  <ListItem>I - Interface Segregation (Robert C. Martin ou pelo grupo)</ListItem>
+  <ListItem>D - Dependency Inversion (Robert C. Martin ou pelo grupo)</ListItem>
 </List>
+
+---
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  "Os princípios SOLID não são regras. Eles não são leis. Eles não são verdades perfeitas. São
+  declarações na ordem de "Uma maçã por dia mantém o médico longe." Este é um bom princípio, é um
+  bom conselho, mas não é uma verdade pura, nem uma regra." - Uncle Bob
+</Text>
 
 ---
 
@@ -482,7 +500,7 @@ class Churrasqueiro {
 ---
 
 <Heading as="h2" mb={4} style={{ textAlign: "center" }}>
-  Liskov vendo esse código
+  Barbara Liskov vendo esse código
 </Heading>
 
 <Image
@@ -490,20 +508,6 @@ class Churrasqueiro {
   alt="segurança-do-open-closed"
   style={{ width: "700px", height: "700px" }}
 />
-
----
-
-<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
-  PS: Não conheço Liskov
-</Heading>
-
----
-
-<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
-  Brincadeira, é a Barbara Liskov
-</Heading>
-
-<Image src={barbaraLiskov} style={{ width: "400px", height: "500px" }} />
 
 ---
 
@@ -1318,10 +1322,31 @@ class Churrasqueiro {
 <List>
   <ListItem>
     <a
+      href="https://www.techtarget.com/whatis/definition/SOLID-software-design-principles"
+      target="_blank"
+    >
+      SOLID - Software design principles
+    </a>
+  </ListItem>
+  <ListItem>
+    <a href="http://cleancoder.com/products" target="_blank">
+      Robert C. Martin Blog
+    </a>
+  </ListItem>
+  <ListItem>
+    <a
       href="https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design"
       target="_blank"
     >
       (Digital Ocean) SOLID - the first five principles of object oriented design
+    </a>
+  </ListItem>
+  <ListItem>
+    <a
+      href="https://dev.to/thiagoluna/solid-no-laravel-aplicando-principios-e-boas-praticas-para-entregar-melhores-solucoes-1ogh"
+      target="_blank"
+    >
+      SOLID no Laravel - Aplicando princípios e boas práticas para entregar melhores soluções.
     </a>
   </ListItem>
   <ListItem>
@@ -1332,6 +1357,11 @@ class Churrasqueiro {
   <ListItem>
     <a href="https://refactoring.guru/smells/large-class" target="_blank">
       Code smells - Large Class
+    </a>
+  </ListItem>
+  <ListItem>
+    <a href="https://github.com/lucasfloriani/ensinando-solid-com-churrasco" target="_blank">
+      Repositório da apresentação
     </a>
   </ListItem>
 </List>
