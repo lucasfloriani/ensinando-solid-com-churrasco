@@ -1,0 +1,1337 @@
+import { themes } from "mdx-deck";
+import { Box, Image, Heading, Text } from "theme-ui";
+import Giphy from "./src/components/giphy";
+import { List, ListItem } from "./src/components/list";
+import customTheme from "./src/components/theme";
+import barbaraLiskov from "./src/images/barbara-liskov.jpg";
+
+export const theme = {
+  ...themes.future,
+  components: {
+    ...themes.future.components,
+    pre: customTheme.components.pre,
+    code: customTheme.components.code,
+  },
+};
+
+<Head>
+  <title>SOLID</title>
+</Head>
+
+<Heading as="h1" mb={4}>
+  SOLID
+</Heading>
+
+<Heading as="h3" style={{ textAlign: "center" }}>
+  Entendendo as suas regras <br /> com um bom churrasco!
+</Heading>
+
+---
+
+<Heading as="h1" mb={4}>
+  O que é SOLID?
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  SOLID é um sigla para cinco princípios (regras) de projeto destinados a tornar os projetos
+  orientados a objetos mais compreensíveis, flexíveis e de fácil manutenção
+</Text>
+
+---
+
+<Heading as="h1" mb={4}>
+  S.O.L.I.D
+</Heading>
+
+<List>
+  <ListItem>S - Single-responsability</ListItem>
+  <ListItem>O - Open-closed</ListItem>
+  <ListItem>L - Liskov Substitution</ListItem>
+  <ListItem>I - Interface Segregation</ListItem>
+  <ListItem>D - Dependency Inversion</ListItem>
+</List>
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  Prontos para desenvolvermos <br /> nosso churrasco?
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/kVOYg5SXMQn6M/giphy.gif"
+  alt="churrasco-e-dancando"
+  style={{ width: "400px", height: "500px" }}
+/>
+
+---
+
+<Heading as="h1" mb={4}>
+  S - Single Responsability
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  Uma classe deve ter somente um propósito
+</Text>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  S - Single Responsability
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Antes da refatoração
+</Text>
+
+```typescript
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: object[];
+  // ===================================================
+  // Propriedades extras que não tem a ver com o Churrasqueiro
+  // ===================================================
+  public dinheiro: number;
+  public quantidadeDeGasolina: number;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: object[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: object[]): void {}
+  private usarChurrasqueira(items: object[]) {}
+  private verificarItemsNaChurrasqueira(items: object[]) {}
+
+  // ===================================================
+  // Metodos extras que não tem a ver exclusivamente com o Churrasqueiro
+  // ===================================================
+  reunirDinheiroParaItems(): void {}
+  abastecerOCarro(): void {}
+  comprarItems(listaDeItems: string[]): void {}
+}
+```
+
+---
+
+<Heading as="h1">Famosa GOD CLASS</Heading>
+
+<Heading as="h2" mb={4} style={{ fontAlign: "center" }}>
+  (Anti-pattern)
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/ibGFpMv1Uoais/giphy.gif"
+  alt="churrasco-e-dancando"
+  style={{ width: "650px", height: "500px" }}
+/>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  S - Single Responsability
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Depois da refatoração
+</Text>
+
+```typescript
+// Carro que usam pro churrasco
+class Carro {
+  public quantidadeDeGasolina: number;
+}
+
+class Pessoa {
+  public dinheiro: number;
+  public carro: Carro | null;
+
+  // Estas ações (metodos) pode ser feito por qualquer um que vai
+  // participar do churrasco, não é responsabilidade unica do Churrasqueiro,
+  // a resposabilidade dele é cuidar dos itens a serem assados na churrasqueira
+  abastecerOCarro(): void {}
+  reunirDinheiroParaItems(): void {}
+  comprarItems(listaDeItems: string[]): void {}
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: object[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: object[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: object[]): void {}
+  private usarChurrasqueira(items: object[]) {}
+  private verificarItemsNaChurrasqueira(items: object[]) {}
+}
+```
+
+---
+
+<Heading as="h1" mb={4}>
+  O - Open-Closed
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  Um objeto ou entidade deve estar aberta para ser extendida mas fechada para alteração
+</Text>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  O - Open-Closed
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Antes da refatoração
+</Text>
+
+```typescript
+class Carne {
+  public nome: string;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+
+  constructor(nome: string, tipoDeCarne: "Bovino" | "Suino", corteDaCarne: string) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.tipoDeCarne === "Bovino") {
+        if (item.corteDaCarne === "Maminha") {
+          // TODO: Modo de preparo
+        } else if (item.corteDaCarne === "Contrafilé") {
+          // TODO: Modo de preparo
+        }
+      } else if (item.tipoDeCarne === "Suino") {
+        if (item.corteDaCarne === "Bisteca") {
+          // TODO: Modo de preparo
+        } else if (item.corteDaCarne === "Paleta") {
+          // TODO: Modo de preparo
+        }
+      }
+      // O que aconteceria se eu tivesse que adicionar o modo de preparo
+      // para frango? Isso mesmo, eu teria que alterar a classe novamente,
+      // fazendo assim com que eu quebra-se a regra do Open Closed.
+      //
+      // Como podemos resolver isso? Deixando a regra de como preparar um item
+      // para assar dentro da própria classe do item, como em alguns casos
+      // quando compramos uma carne e ela vem com algumas instruções por exemplo
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  Nosso código implementando
+  <br /> Open Closed
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/11fot0YzpQMA0g/giphy.gif"
+  alt="segurança-do-open-closed"
+  style={{ width: "500px", height: "700px" }}
+/>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  O - Open-Closed
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Depois da refatoração
+</Text>
+
+```typescript
+class Carne {
+  public nome: string;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+      // Separando esta lógica para a classe mais capacitada para lidar com isto,
+      // nós não precisamos mais adicionar vários ifs e elses para lidar com
+      // novos casos, pois agora cada Carne adicionada na lista tem as informações
+      // de como lidar com seu preparo, nós como Churrasqueiros só precisamos
+      // ler as instruções para termos um guia de como assar o item em questão
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h1" mb={4}>
+  L - Liskov Substitution
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  Se substituirmos uma referência de objeto de uma super classe por um objeto de qualquer uma de
+  suas subclasses, o programa não deverá quebrar pois segue o contrato
+</Text>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  L - Liskov Substitution
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Antes da refatoração
+</Text>
+
+```typescript
+class Carne {
+  public nome: string;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    // Lógica usando taxa de sangramento
+    return this.modoDePreparo;
+  }
+}
+
+// Digamos que agora nós queremos não somente assar carne na churrasqueira,
+// porem tambem queremos fazer um pão de alho ou até mesmo um abacaxi com canela.
+//
+// Para fazermos isto nós precisariamos ter uma ordem correta de subclasses
+// no qual tambem teriam o metodo de modo de preparo para o Churrasqueiro.
+//
+// A regra de Substituição de Liskov diz que se a regra for aplicada corretamente,
+// nós podemos substituir a classe pai pela classe filha sem ter problemas no código
+//
+// Outro ponto seria que uma classe com herança (Classe filha),
+// pode ser confirmada como correta quando nós cumprimos com o contrato que a
+// classe pai propoem, como por exemplo a utilização de suas propriedades e metodos.
+//
+// Um exemplo da não utilização deste principio seria o código abaixo,
+// o qual nos demonstra facilmente que estas classes filhas estão incorretas
+// pois nenhuma delas é uma carne e nenhuma delas tem taxa de sangramento,
+// sendo somente uma forma preguiçosa de reunar a class Carne para não refatorar
+// corretamente o código.
+class Abacaxi extends Carne {
+  public acidez: number;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    // Abacaxi não tem sangramento!
+    taxaDeSangramento: number,
+    modoDePreparo: string,
+    acidez: number
+  ) {
+    super(nome, tipoDeCarne, corteDaCarne, taxaDeSangramento, modoDePreparo);
+    this.acidez = acidez;
+  }
+}
+
+class PaoDeAlho extends Carne {
+  public tipoDoMolho: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    // Nem pão de alho tem sangramento!
+    taxaDeSangramento: number,
+    modoDePreparo: string,
+    tipoDoMolho: string
+  ) {
+    super(nome, tipoDeCarne, corteDaCarne, taxaDeSangramento, modoDePreparo);
+    this.tipoDoMolho = tipoDoMolho;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  Liskov vendo esse código
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/doJrCO8kCAgNy/giphy.gif"
+  alt="segurança-do-open-closed"
+  style={{ width: "700px", height: "700px" }}
+/>
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  PS: Não conheço Liskov
+</Heading>
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  Brincadeira, é a Barbara Liskov
+</Heading>
+
+<Image src={barbaraLiskov} style={{ width: "400px", height: "500px" }} />
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  L - Liskov Substitution
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Depois da refatoração
+</Text>
+
+```typescript
+// Para aplicarmos corretamente o principio de Substituição de Liskov,
+// nós iremos alterar a lógica para realmente aplica-la, fazendo assim
+// com que cada classe só tenha que ter (metodos e/ou propriedades que precisa)
+interface ItemParaAssar {
+  getModoDePreparo(): string;
+  getNome(): string;
+  getNota(): number;
+}
+
+class Carne implements ItemParaAssar {
+  public nome: string;
+  public nota: number;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    // Lógica usando taxa de sangramento
+    return this.modoDePreparo;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+}
+
+// Utilizando uma interface que condiz corretamente com os atributos e metodos
+// usados pelas classes que implementam ela, fazendo assim com que tenhamos
+// o principio de Substituição de Liskov em nosso código.
+class Abacaxi implements ItemParaAssar {
+  public nome: string;
+  public acidez: number;
+  public nota: number;
+  private modoDePreparo: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, acidez: number) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.acidez = acidez;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class PaoDeAlho implements ItemParaAssar {
+  public nome: string;
+  public nota: number;
+  private modoDePreparo: string;
+
+  public tipoDoMolho: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, tipoDoMolho: string) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.tipoDoMolho = tipoDoMolho;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h1" mb={4}>
+  I - Interface Segregation
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  Um cliente de uma interface não deveria ser obrigado a implementar algo da interface que realmente
+  não usa, ou clientes não deveriam depender de metodos que eles não usam
+</Text>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  I - Interface Segregation
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Antes da refatoração
+</Text>
+
+```typescript
+// O principio de Segregação de Interfaces fala que um cliente de uma interface
+// não deveria ser obrigado a implementar algo da interface que realmente não usa, ou
+// clientes não deveriam depender de metodos que eles não usam
+//
+// O que podemos tirar de conclusão aqui é que não deveriamos criar interfaces grandes
+// ou que tem mais de um propósito (Single Responsability), com isto dito nos devemos
+// separar o metodo de pegar a nota (getNota) pois ela não tem relação com assar algo
+interface ItemParaAssar {
+  getModoDePreparo(): string;
+  getNome(): string;
+  getNota(): number;
+}
+
+class Carne implements ItemParaAssar {
+  public nome: string;
+  public nota: number;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    return this.modoDePreparo;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+}
+
+class Abacaxi implements ItemParaAssar {
+  public nome: string;
+  public acidez: number;
+  public nota: number;
+  private modoDePreparo: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, acidez: number) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.acidez = acidez;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class PaoDeAlho implements ItemParaAssar {
+  public nome: string;
+  public nota: number;
+  private modoDePreparo: string;
+
+  public tipoDoMolho: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, tipoDoMolho: string) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.tipoDoMolho = tipoDoMolho;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  Eu implementando tudo
+  <br /> para conseguir usar a interface
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/NV4cSrRYXXwfUcYnua/giphy.gif"
+  alt="segurança-do-open-closed"
+  style={{ width: "1100px", height: "700px" }}
+/>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  I - Interface Segregation
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Depois da refatoração
+</Text>
+
+```typescript
+// Agora com esta refatoração, nós podemos reusar a interface Nota para
+// muitas outras coisas como por exemplo um Carro, Casa, Chacará, etc
+//
+// Aproveitando o embalo eu já separei outras possiveis interfaces que
+// podemos reutilizar tambem
+interface ModoDePreparo {
+  getModoDePreparo(): string;
+}
+
+interface Nome {
+  getNome(): string;
+}
+
+interface Nota {
+  getNota(): number;
+}
+
+class Carne implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    return this.modoDePreparo;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+}
+
+class Abacaxi implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public acidez: number;
+  public nota: number;
+  private modoDePreparo: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, acidez: number) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.acidez = acidez;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class PaoDeAlho implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  private modoDePreparo: string;
+
+  public tipoDoMolho: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, tipoDoMolho: string) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.tipoDoMolho = tipoDoMolho;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h1" mb={4}>
+  D - Dependency Inversion
+</Heading>
+
+<Text sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto", textAlign: "center" }}>
+  O código deve depender de abstrações e não de classes concretas
+</Text>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  D - Dependency Inversion
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Antes da refatoração
+</Text>
+
+```typescript
+interface ModoDePreparo {
+  getModoDePreparo(): string;
+}
+
+interface Nome {
+  getNome(): string;
+}
+
+interface Nota {
+  getNota(): number;
+}
+
+class Carne implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    return this.modoDePreparo;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+}
+
+class Abacaxi implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public acidez: number;
+  public nota: number;
+  private modoDePreparo: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, acidez: number) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.acidez = acidez;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class PaoDeAlho implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  private modoDePreparo: string;
+
+  public tipoDoMolho: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, tipoDoMolho: string) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.tipoDoMolho = tipoDoMolho;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  // Dependency Inversion explica que nosso código deveria depender
+  // de abstrações e não de classes concretas.
+  //
+  // Com base nessa afirmação, nós tentaremos sempre utilizar-se de
+  // classes abstratas ou interfaces pois elas são mais fáceis de implementar
+  // e porque deixam nossos códigos mais fáceis de modificar, impedindo assim
+  // de quebrarmos a regra do Open Closed do SOLID tambem
+  //
+  // Iremos utilizar a interface ModoDePreparar pois é o unico metodo que precisamos
+  // para o nosso Churrasqueiro
+  public itemsParaAssar: Carne[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: Carne[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: Carne[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: Carne[]) {}
+  private verificarItemsNaChurrasqueira(items: Carne[]) {}
+}
+```
+
+---
+
+<Heading as="h2" mb={4} style={{ textAlign: "center" }}>
+  É tudo sobre contratos!
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/e05GB2c86qgOk/giphy.gif"
+  alt="segurança-do-open-closed"
+  style={{ width: "900px", height: "900px" }}
+/>
+
+---
+
+<Heading as="h1" mt={4} mb={2}>
+  D - Dependency Inversion
+</Heading>
+
+<Text
+  sx={{ maxWidth: "calc(50% - 200px)", width: "100%", margin: "0 auto 8px", textAlign: "center" }}
+>
+  Depois da refatoração
+</Text>
+
+```typescript
+interface ModoDePreparo {
+  getModoDePreparo(): string;
+}
+
+interface Nome {
+  getNome(): string;
+}
+
+interface Nota {
+  getNota(): number;
+}
+
+class Carne implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  public tipoDeCarne: "Bovino" | "Suino";
+  public corteDaCarne: string;
+  private taxaDeSangramento: number;
+  private modoDePreparo: string;
+
+  constructor(
+    nome: string,
+    tipoDeCarne: "Bovino" | "Suino",
+    corteDaCarne: string,
+    taxaDeSangramento: number,
+    modoDePreparo: string
+  ) {
+    this.nome = nome;
+    this.tipoDeCarne = tipoDeCarne;
+    this.corteDaCarne = corteDaCarne;
+    this.taxaDeSangramento = taxaDeSangramento;
+    this.modoDePreparo = modoDePreparo;
+  }
+
+  public getModoDePreparo(): string {
+    this.taxaDeSangramento;
+    return this.modoDePreparo;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+}
+
+class Abacaxi implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public acidez: number;
+  public nota: number;
+  private modoDePreparo: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, acidez: number) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.acidez = acidez;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class PaoDeAlho implements ModoDePreparo, Nome, Nota {
+  public nome: string;
+  public nota: number;
+  private modoDePreparo: string;
+
+  public tipoDoMolho: string;
+
+  constructor(nome: string, modoDePreparo: string, nota: number, tipoDoMolho: string) {
+    this.nome = nome;
+    this.nota = nota;
+    this.modoDePreparo = modoDePreparo;
+    this.tipoDoMolho = tipoDoMolho;
+  }
+
+  public getNome(): string {
+    return this.nome;
+  }
+
+  public getNota(): number {
+    return this.nota;
+  }
+
+  public getModoDePreparo(): string {
+    return this.modoDePreparo;
+  }
+}
+
+class Churrasqueiro {
+  public name: string;
+  public itemsParaAssar: ModoDePreparo[];
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public assarItems(items: ModoDePreparo[]): void {
+    this.prepararChurrasqueira();
+    this.prepararItems(items);
+    this.usarChurrasqueira(items);
+    this.verificarItemsNaChurrasqueira(items);
+  }
+
+  private prepararChurrasqueira(): void {}
+  private prepararItems(items: ModoDePreparo[]): void {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      item.getModoDePreparo();
+    }
+  }
+  private usarChurrasqueira(items: ModoDePreparo[]) {}
+  private verificarItemsNaChurrasqueira(items: ModoDePreparo[]) {}
+}
+```
+
+---
+
+<Heading as="h1" mb={4} style={{ textAlign: "center" }}>
+  Agora temos um churrasco <br /> de SOLID maravilhoso!
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/jQcVNqF8ylQrHQOSBv/giphy.gif"
+  alt="churrasco-e-dancando"
+  style={{ width: "1200px", height: "600px" }}
+/>
+
+---
+
+<Heading as="h1" mb={4} style={{ textAlign: "center" }}>
+  Duvidas?
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/l41lZ1XzdHRndi73a/giphy.gif"
+  alt="churrasco-e-dancando"
+  style={{ width: "1200px", height: "600px" }}
+/>
+
+---
+
+<Heading as="h1" mb={4} style={{ textAlign: "center" }}>
+  Obrigado!
+</Heading>
+
+<Image
+  src="https://media.giphy.com/media/QAsBwSjx9zVKoGp9nr/giphy.gif"
+  alt="churrasco-e-dancando"
+  style={{ width: "1200px", height: "600px" }}
+/>
+
+---
+
+<Heading as="h1" mb={4} style={{ textAlign: "center" }}>
+  Referencias:
+</Heading>
+
+<List>
+  <ListItem>
+    <a
+      href="https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design"
+      target="_blank"
+    >
+      (Digital Ocean) SOLID - the first five principles of object oriented design
+    </a>
+  </ListItem>
+  <ListItem>
+    <a href="https://reflectoring.io/lsp-explained" target="_blank">
+      Liskov Substitution Principle Explained
+    </a>
+  </ListItem>
+  <ListItem>
+    <a href="https://refactoring.guru/smells/large-class" target="_blank">
+      Code smells - Large Class
+    </a>
+  </ListItem>
+</List>

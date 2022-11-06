@@ -1,0 +1,19 @@
+{
+  "name": "ensinando-solid-com-churrasco",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "mdx-deck presentation.mdx",
+    "build": "mdx-deck build presentation.mdx",
+    "backend": "nodemon ./backend/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mdx-deck": "^4.1.1",
+    "react-code-blocks": "^0.0.9-0",
+    "react-syntax-highlighter": "^15.5.0"
+  }
+}
